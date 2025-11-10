@@ -110,11 +110,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <header className="bg-black px-4 py-2 flex items-center justify-between sticky top-0 z-50">
+      <header className="bg-black px-4 py-3 flex items-center justify-between sticky top-0 z-50">
         <img
           src="/logotipoyt.png"
           alt="YouTube"
-          className="h-8 object-contain"
+          className="h-10 object-contain"
         />
         <div className="flex items-center gap-4">
           <Search className="w-6 h-6" />

@@ -9,11 +9,23 @@ interface Comment {
   likedByUser: boolean;
 }
 
+const staticComments = [
+  { id: 's1', name: 'Marcia L', text: 'Yo también cambié mi alimentación, no empecé a hacer ejercicio. Solo comencé con esta receta. Mi energía está aumentando.', color: 'blue', initial: 'M', likes: 342 },
+  { id: 's2', name: 'Luis H', text: 'OK... normalmente suelo estos videos largos. Pero el cada segundo cuenta. Algo que no he hablado en años.', color: 'green', initial: 'L', likes: 89 },
+  { id: 's3', name: 'Maria Delgado', text: 'No voy a mentir — al principio pensé que una estafa. Pero lo seguí. Vieja lo que dice mi doctor de diabetes en menos de 7 días...', color: 'purple', initial: 'M', likes: 567 },
+  { id: 's4', name: 'Rosa Elena M', text: 'Mi médico estaba escéptico, pero compré el paquete de 6 frascos. Una semana después, ya me siento como una nueva persona.', color: 'red', initial: 'R', likes: 234 },
+  { id: 's5', name: 'Rosa Elena M', text: 'Es real, pero espera que mis niveles están estables por primera vez en 10 años.', color: 'orange', initial: 'R', likes: 456 },
+  { id: 's6', name: 'Miguel Angel Torres', text: 'Solo quería dormir mejor, pero terminé bajando mi glucosa en 6 días. Me siento más ligero, con más ánimo.', color: 'teal', initial: 'M', likes: 123 },
+  { id: 's7', name: 'Jorge Jiménez', text: 'Lovi en Facebook y pensé "una cosa más para vender". Pero me funciona. 2 frascos y MUCHO ha cambiado.', color: 'pink', initial: 'J', likes: 678 }
+];
+
 function App() {
   const [viewCount, setViewCount] = useState(3897);
   const [isLive, setIsLive] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
   const [commentText, setCommentText] = useState('');
+  const [videoLiked, setVideoLiked] = useState(false);
+  const [videoLikeCount, setVideoLikeCount] = useState(3897);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -28,6 +40,16 @@ function App() {
     const savedComments = localStorage.getItem('userComments');
     if (savedComments) {
       setComments(JSON.parse(savedComments));
+    }
+
+    const savedVideoLike = localStorage.getItem('videoLiked');
+    if (savedVideoLike === 'true') {
+      setVideoLiked(true);
+    }
+
+    const savedVideoLikeCount = localStorage.getItem('videoLikeCount');
+    if (savedVideoLikeCount) {
+      setVideoLikeCount(parseInt(savedVideoLikeCount));
     }
 
     return () => {
@@ -73,6 +95,16 @@ function App() {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleAddComment();
+    }
+  };
+
+  const handleVideoLike = () => {
+    if (!videoLiked) {
+      const newCount = videoLikeCount + 1;
+      setVideoLiked(true);
+      setVideoLikeCount(newCount);
+      localStorage.setItem('videoLiked', 'true');
+      localStorage.setItem('videoLikeCount', newCount.toString());
     }
   };
 
@@ -122,9 +154,14 @@ function App() {
         </div>
 
         <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-800">
-          <button className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors">
-            <ThumbsUp className="w-5 h-5" />
-            <span>{viewCount}</span>
+          <button
+            onClick={handleVideoLike}
+            className={`flex items-center gap-2 text-sm transition-colors ${
+              videoLiked ? 'text-blue-500' : 'hover:text-gray-300'
+            }`}
+          >
+            <ThumbsUp className={`w-5 h-5 ${videoLiked ? 'fill-current' : ''}`} />
+            <span>{videoLikeCount}</span>
           </button>
           <button className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors">
             <ThumbsDown className="w-5 h-5" />
@@ -147,62 +184,20 @@ function App() {
             <button className="text-xs text-gray-400">▼ 3.9K</button>
           </div>
 
-          <div className="space-y-3 text-sm">
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-blue-600 flex-shrink-0 flex items-center justify-center text-xs">M</div>
-              <div>
-                <span className="font-semibold text-gray-300">Marcia L</span>
-                <p className="text-gray-400 text-xs leading-relaxed">Yo también cambié mi alimentación, no empecé a hacer ejercicio. Solo comencé con esta receta. Mi energía está aumentando.</p>
+          <div className="space-y-3 text-sm max-h-96 overflow-y-auto">
+            {staticComments.map((comment) => (
+              <div key={comment.id} className="flex gap-2">
+                <div className={`w-6 h-6 rounded-full bg-${comment.color}-600 flex-shrink-0 flex items-center justify-center text-xs`}>{comment.initial}</div>
+                <div className="flex-1">
+                  <span className="font-semibold text-gray-300">{comment.name}</span>
+                  <p className="text-gray-400 text-xs leading-relaxed">{comment.text}</p>
+                  <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
+                    <Heart className="w-3 h-3 fill-current" />
+                    <span>{comment.likes}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-green-600 flex-shrink-0 flex items-center justify-center text-xs">L</div>
-              <div>
-                <span className="font-semibold text-gray-300">Luis H</span>
-                <p className="text-gray-400 text-xs leading-relaxed">OK... normalmente suelo estos videos largos. Pero el cada segundo cuenta. Algo que no he hablado en años.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-purple-600 flex-shrink-0 flex items-center justify-center text-xs">M</div>
-              <div>
-                <span className="font-semibold text-gray-300">Maria Delgado</span>
-                <p className="text-gray-400 text-xs leading-relaxed">No voy a mentir — al principio pensé que una estafa. Pero lo seguí. Vieja lo que dice mi doctor de diabetes en menos de 7 días...</p>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-red-600 flex-shrink-0 flex items-center justify-center text-xs">R</div>
-              <div>
-                <span className="font-semibold text-gray-300">Rosa Elena M</span>
-                <p className="text-gray-400 text-xs leading-relaxed">Mi médico estaba escéptico, pero compré el paquete de 6 frascos. Una semana después, ya me siento como una nueva persona.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-orange-600 flex-shrink-0 flex items-center justify-center text-xs">R</div>
-              <div>
-                <span className="font-semibold text-gray-300">Rosa Elena M</span>
-                <p className="text-gray-400 text-xs leading-relaxed">Es real, pero espera que mis niveles están estables por primera vez en 10 años.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-teal-600 flex-shrink-0 flex items-center justify-center text-xs">M</div>
-              <div>
-                <span className="font-semibold text-gray-300">Miguel Angel Torres</span>
-                <p className="text-gray-400 text-xs leading-relaxed">Solo quería dormir mejor, pero terminé bajando mi glucosa en 6 días. Me siento más ligero, con más ánimo.</p>
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-pink-600 flex-shrink-0 flex items-center justify-center text-xs">J</div>
-              <div>
-                <span className="font-semibold text-gray-300">Jorge Jiménez</span>
-                <p className="text-gray-400 text-xs leading-relaxed">Lovi en Facebook y pensé "una cosa más para vender". Pero me funciona. 2 frascos y MUCHO ha cambiado.</p>
-              </div>
-            </div>
+            ))}
 
             {comments.map((comment) => (
               <div key={comment.id} className="flex gap-2">

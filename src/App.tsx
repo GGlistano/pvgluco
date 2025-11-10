@@ -1,9 +1,19 @@
-import { Search, MoreVertical, ThumbsUp, ThumbsDown, Share2, MessageCircle } from 'lucide-react';
+import { Search, MoreVertical, ThumbsUp, ThumbsDown, Share2, MessageCircle, Heart } from 'lucide-react';
 import { useEffect, useState } from 'react';
+
+interface Comment {
+  id: string;
+  text: string;
+  timestamp: number;
+  likes: number;
+  likedByUser: boolean;
+}
 
 function App() {
   const [viewCount, setViewCount] = useState(3897);
   const [isLive, setIsLive] = useState(true);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [commentText, setCommentText] = useState('');
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -15,6 +25,11 @@ function App() {
       setViewCount(prev => prev + Math.floor(Math.random() * 5));
     }, 3000);
 
+    const savedComments = localStorage.getItem('userComments');
+    if (savedComments) {
+      setComments(JSON.parse(savedComments));
+    }
+
     return () => {
       clearInterval(interval);
       if (script.parentNode) {
@@ -22,6 +37,44 @@ function App() {
       }
     };
   }, []);
+
+  const handleAddComment = () => {
+    if (commentText.trim() === '') return;
+
+    const newComment: Comment = {
+      id: Date.now().toString(),
+      text: commentText,
+      timestamp: Date.now(),
+      likes: 0,
+      likedByUser: false
+    };
+
+    const updatedComments = [newComment, ...comments];
+    setComments(updatedComments);
+    localStorage.setItem('userComments', JSON.stringify(updatedComments));
+    setCommentText('');
+  };
+
+  const handleLikeComment = (commentId: string) => {
+    const updatedComments = comments.map(comment => {
+      if (comment.id === commentId) {
+        return {
+          ...comment,
+          likes: comment.likedByUser ? comment.likes - 1 : comment.likes + 1,
+          likedByUser: !comment.likedByUser
+        };
+      }
+      return comment;
+    });
+    setComments(updatedComments);
+    localStorage.setItem('userComments', JSON.stringify(updatedComments));
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleAddComment();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -151,13 +204,22 @@ function App() {
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-indigo-600 flex-shrink-0 flex items-center justify-center text-xs">V</div>
-              <div>
-                <span className="font-semibold text-gray-300">Você</span>
-                <p className="text-gray-400 text-xs">Yhh</p>
+            {comments.map((comment) => (
+              <div key={comment.id} className="flex gap-2">
+                <div className="w-6 h-6 rounded-full bg-indigo-600 flex-shrink-0 flex items-center justify-center text-xs">V</div>
+                <div className="flex-1">
+                  <span className="font-semibold text-gray-300">Você</span>
+                  <p className="text-gray-400 text-xs leading-relaxed">{comment.text}</p>
+                  <button
+                    onClick={() => handleLikeComment(comment.id)}
+                    className={`flex items-center gap-1 mt-1 text-xs ${comment.likedByUser ? 'text-red-500' : 'text-gray-500'} hover:text-red-400 transition-colors`}
+                  >
+                    <Heart className={`w-3 h-3 ${comment.likedByUser ? 'fill-current' : ''}`} />
+                    <span>{comment.likes > 0 ? comment.likes : ''}</span>
+                  </button>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
 
           <div className="mt-4 pt-3 border-t border-gray-800">
@@ -165,13 +227,20 @@ function App() {
               <input
                 type="text"
                 placeholder="Clique aqui..."
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                onKeyPress={handleKeyPress}
+                maxLength={200}
                 className="flex-1 bg-gray-800 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <button className="bg-blue-600 hover:bg-blue-700 rounded-full w-10 h-10 flex items-center justify-center transition-colors">
+              <button
+                onClick={handleAddComment}
+                className="bg-blue-600 hover:bg-blue-700 rounded-full w-10 h-10 flex items-center justify-center transition-colors"
+              >
                 <span className="text-lg">→</span>
               </button>
             </div>
-            <p className="text-xs text-gray-500 text-center mt-2">0/200</p>
+            <p className="text-xs text-gray-500 text-center mt-2">{commentText.length}/200</p>
           </div>
         </div>
 

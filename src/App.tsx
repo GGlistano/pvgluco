@@ -1,0 +1,216 @@
+import { Search, MoreVertical, ThumbsUp, ThumbsDown, Share2, MessageCircle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+function App() {
+  const [viewCount, setViewCount] = useState(3897);
+  const [isLive, setIsLive] = useState(true);
+
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://scripts.converteai.net/9d93e4b2-3654-4bea-bda0-107c1328d520/players/69111ec6230c7d2caf64bcd1/v4/player.js';
+    script.async = true;
+    document.head.appendChild(script);
+
+    const interval = setInterval(() => {
+      setViewCount(prev => prev + Math.floor(Math.random() * 5));
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      if (script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <header className="bg-black px-4 py-2 flex items-center justify-between sticky top-0 z-50">
+        <img
+          src="/logotipoyt.png"
+          alt="YouTube"
+          className="h-8 object-contain"
+        />
+        <div className="flex items-center gap-4">
+          <Search className="w-6 h-6" />
+          <MoreVertical className="w-6 h-6" />
+        </div>
+      </header>
+
+      <div className="relative bg-black">
+        <div className="w-full aspect-[9/16] bg-black flex items-center justify-center">
+          <vturb-smartplayer
+            id="vid-69111ec6230c7d2caf64bcd1"
+            style={{ display: 'block', margin: '0 auto', width: 'auto', maxWidth: '100%', height: '100%', maxHeight: '100%' }}
+          />
+        </div>
+      </div>
+
+      <div className="px-4 py-3">
+        <h1 className="text-lg font-bold mb-2 leading-tight">
+          Esta Receta De Cúrcuma Revierte Tu Diabetes Tipo 2 En 7 Días
+        </h1>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <img
+              src="/doutor.jpg"
+              alt="Dr. Carlos Jaramillo"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <div>
+              <p className="font-semibold text-sm">Dr. Carlos Jaramillo</p>
+              <p className="text-xs text-gray-400">5.44m</p>
+            </div>
+          </div>
+          <button className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded-full font-semibold text-sm transition-colors">
+            Inscrirse
+          </button>
+        </div>
+
+        <div className="flex items-center gap-4 mb-4 pb-4 border-b border-gray-800">
+          <button className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors">
+            <ThumbsUp className="w-5 h-5" />
+            <span>{viewCount}</span>
+          </button>
+          <button className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors">
+            <ThumbsDown className="w-5 h-5" />
+          </button>
+          <button className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors">
+            <Share2 className="w-5 h-5" />
+            <span>Compartir</span>
+          </button>
+          <button className="flex items-center gap-2 text-sm hover:text-gray-300 transition-colors">
+            <MessageCircle className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="bg-gray-900 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-bold text-sm flex items-center gap-2">
+              Chat ao vivo
+              <span className="text-xs text-gray-400">Reproduzir colaboradas</span>
+            </h2>
+            <button className="text-xs text-gray-400">▼ 3.9K</button>
+          </div>
+
+          <div className="space-y-3 text-sm">
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-blue-600 flex-shrink-0 flex items-center justify-center text-xs">M</div>
+              <div>
+                <span className="font-semibold text-gray-300">Marcia L</span>
+                <p className="text-gray-400 text-xs leading-relaxed">Yo también cambié mi alimentación, no empecé a hacer ejercicio. Solo comencé con esta receta. Mi energía está aumentando.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-green-600 flex-shrink-0 flex items-center justify-center text-xs">L</div>
+              <div>
+                <span className="font-semibold text-gray-300">Luis H</span>
+                <p className="text-gray-400 text-xs leading-relaxed">OK... normalmente suelo estos videos largos. Pero el cada segundo cuenta. Algo que no he hablado en años.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-purple-600 flex-shrink-0 flex items-center justify-center text-xs">M</div>
+              <div>
+                <span className="font-semibold text-gray-300">Maria Delgado</span>
+                <p className="text-gray-400 text-xs leading-relaxed">No voy a mentir — al principio pensé que una estafa. Pero lo seguí. Vieja lo que dice mi doctor de diabetes en menos de 7 días...</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-red-600 flex-shrink-0 flex items-center justify-center text-xs">R</div>
+              <div>
+                <span className="font-semibold text-gray-300">Rosa Elena M</span>
+                <p className="text-gray-400 text-xs leading-relaxed">Mi médico estaba escéptico, pero compré el paquete de 6 frascos. Una semana después, ya me siento como una nueva persona.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-orange-600 flex-shrink-0 flex items-center justify-center text-xs">R</div>
+              <div>
+                <span className="font-semibold text-gray-300">Rosa Elena M</span>
+                <p className="text-gray-400 text-xs leading-relaxed">Es real, pero espera que mis niveles están estables por primera vez en 10 años.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-teal-600 flex-shrink-0 flex items-center justify-center text-xs">M</div>
+              <div>
+                <span className="font-semibold text-gray-300">Miguel Angel Torres</span>
+                <p className="text-gray-400 text-xs leading-relaxed">Solo quería dormir mejor, pero terminé bajando mi glucosa en 6 días. Me siento más ligero, con más ánimo.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-pink-600 flex-shrink-0 flex items-center justify-center text-xs">J</div>
+              <div>
+                <span className="font-semibold text-gray-300">Jorge Jiménez</span>
+                <p className="text-gray-400 text-xs leading-relaxed">Lovi en Facebook y pensé "una cosa más para vender". Pero me funciona. 2 frascos y MUCHO ha cambiado.</p>
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              <div className="w-6 h-6 rounded-full bg-indigo-600 flex-shrink-0 flex items-center justify-center text-xs">V</div>
+              <div>
+                <span className="font-semibold text-gray-300">Você</span>
+                <p className="text-gray-400 text-xs">Yhh</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-gray-800">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="Clique aqui..."
+                className="flex-1 bg-gray-800 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button className="bg-blue-600 hover:bg-blue-700 rounded-full w-10 h-10 flex items-center justify-center transition-colors">
+                <span className="text-lg">→</span>
+              </button>
+            </div>
+            <p className="text-xs text-gray-500 text-center mt-2">0/200</p>
+          </div>
+        </div>
+
+        <div className="space-y-4 text-sm leading-relaxed text-gray-300 pb-8">
+          <p className="font-bold text-white">
+            Ellos sabían. Por más de una década, ellos sabían.
+          </p>
+
+          <p>
+            Una simple receta casera podía curar la diabetes tipo 2 en solo 7 días — y la enterraron. ¿Por qué? Porque funciona. Y si funciona, no obtienen ganancias.
+          </p>
+
+          <p>
+            Este video ya fue eliminado dos veces. La verdad que estás a punto de ver está siendo silenciada — por la misma industria multimillonaria que te hace creer que los diabetes es "para siempre".
+          </p>
+
+          <p className="font-bold text-white">
+            Olvida el azúcar. Olvida los genes.
+          </p>
+
+          <p>
+            La verdadera causa se esconde en tu hígado — y ese truco de cocina que está naturalmente.
+          </p>
+
+          <p className="font-bold text-white">
+            No es magia. No es una tendencia. Es ciencia que fue enterrada para mantenerte dependiente.
+          </p>
+
+          <p>
+            Si tu vida o la de un ser querido ha sido lucha con la diabetes tipo 2... necesitas ver esto.
+          </p>
+
+          <p className="italic text-yellow-400">
+            Míralo ahora. Guárdalo. Compártelo. Porque esta podría ser la última vez que aparece en línea.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default App;
